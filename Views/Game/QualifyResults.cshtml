@@ -1,0 +1,53 @@
+﻿@using DominoProject.ViewModels
+@model IEnumerable<PlayerQualifyingStageViewModel>
+<h2> Отборочный этап проведен успешно</h2>
+<table>
+    <tr><td>Имя</td><td>Фамилия</td><td>Группа</td><td>Очки</td></tr>
+    @foreach (PlayerQualifyingStageViewModel player in Model)
+    {
+        @if (player.ResultContext != DominoProject.Controllers.GameController.SetScores.ResultContext.OK)
+        {
+        <tr class="bad">
+            <td>@player.Name</td>
+            <td>@player.Surname</td>
+            <td>@player.Group</td>
+            <td>@player.ResultContext</td>
+        </tr>
+        }
+        else
+        {
+        <tr class="good">
+            <td>@player.Name</td>
+            <td>@player.Surname</td>
+            <td>@player.Group</td>
+            <td>@player.QualifyingStageScores</td>
+        </tr>
+        }
+    }
+</table>
+@if (Tournament.GetInstance().stage == Tournament.Stage.QualifyStage)
+{
+    int count = Model.Where(u => u.ResultContext == DominoProject.Controllers.GameController.SetScores.ResultContext.OK).Count();
+    <p>Количество человек, успешно прошедших отборочный этап: @count</p>
+    int max = (int)Math.Pow(2, (int)Math.Log2(count));
+    if (max > 16)
+        max = 16;
+    <form asp-action="StartPlayoff" asp-controller="Game" method="post">
+        <select name="count">
+            @for (int i = max; i > 1; i /= 2)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+        <input type="submit" value="Начать стадию плей-офф"/>
+    </form>
+}
+<style type="text/css">
+    .good {
+        background-color: transparent;
+    }
+
+    .bad {
+        background-color: hotpink;
+    }
+</style>

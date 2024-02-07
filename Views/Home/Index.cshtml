@@ -1,0 +1,15 @@
+﻿@await Html.PartialAsync("Logout")
+<div class="text-center">
+    <h2>Добро пожаловать в Domino Project!</h2>
+    <a asp-action="Info" asp-controller="Home">Информация об аккаунте</a>
+    @if (User.IsInRole("admin"))
+    {
+        <br />
+        <a asp-action="Index" asp-controller="Admin">Панель администратора</a>
+    }
+    else if (User.IsInRole("user"))
+    {
+        <br />
+        <a asp-action="File" asp-controller="Home">CS модуль</a>
+    }
+</div>

@@ -1,0 +1,17 @@
+﻿@using DominoProject.ViewModels
+@model IEnumerable<UserInfoViewModel>
+<h2>Список пользователей</h2>
+<table>
+    <tr><td>Имя</td><td>Фамилия</td><td>Email</td><td>Группа</td><td>Роль</td><td>.cs файл</td></tr>
+    @foreach (UserInfoViewModel user in Model)
+    {
+    <tr>
+        <td>@user.Name</td>
+        <td>@user.Surname</td>
+        <td>@user.Email</td>
+        <td>@user.Group</td>
+        <td>@user.RoleName</td>
+        <td><a asp-action="DownloadAnyFile" asp-controller="Admin" asp-route-path="@user.FPlayerFilePath">@user.FPlayerFilePath.Split('\\').Last()</a></td>
+    </tr>
+    }
+</table>

@@ -1,0 +1,22 @@
+﻿@model DominoProject.ViewModels.StepViewModel
+<button type="button" onclick="doIt()">Start!</button>
+<div id="game-canvas" width="1200" height="700">
+    <!--style="background: burlywood;"-->
+    <div id="text-field">Раздача доминошек и ход компьютера</div>
+    <canvas id="first-player-hand" width="1150" height="100" style="background: green;">
+    </canvas>
+    <canvas id="field-canvas" width="1150" height="370" style="background: green;">
+    </canvas>
+    <canvas id="second-player-hand" width="1150" height="100" style="background: green;">
+    </canvas>
+</div>
+
+<script src="/js/domino.js"></script>
+<script>
+    var steps = @Helper.SerializeObject(Model.steps);
+    var firstPlayer = @Helper.SerializeObject(Model.firstPlayer);
+    var secondPlayer = @Helper.SerializeObject(Model.secondPlayer);
+    var firstRes = @Helper.SerializeObject(Model.firstRes);
+    var secondRes = @Helper.SerializeObject(Model.secondRes);
+    var winner = @Helper.SerializeObject(Model.winner);
+</script>

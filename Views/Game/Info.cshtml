@@ -1,0 +1,17 @@
+﻿@using DominoProject.ViewModels
+@model Tournament
+
+
+<h2>Управление турниром</h2>
+<a asp-controller="Game" asp-action="SaveTournamentData">Сохранить данные о турнире</a>
+<a asp-controller="Game" asp-action="LoadTournamentData">Загрузить данные о турнире</a>
+
+@if (Tournament.GetInstance().stage == Tournament.Stage.NotStarted)
+{
+    <a asp-controller="Game" asp-action="DoQualifyingRound">Начать отборочный этап</a>
+}
+else
+{
+    <br />
+    <a asp-controller="Game" asp-action="QualifyResults">Результат отборочного этапа</a>
+}

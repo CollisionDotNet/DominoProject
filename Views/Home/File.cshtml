@@ -1,0 +1,29 @@
+﻿@model DominoProject.ViewModels.FileViewModel
+<h2>.cs модуль</h2>
+<h4>Требования к .cs модулю:</h4>
+<br />
+<li>Пространство имен должно иметь название DominoC</li>
+<br />
+<li>Класс, содержащий все заданные методы, должен иметь название MFPlayer</li>
+<br />
+<li>Среди полей класса обязано присутствовать поле lHand, являющееся списком типа MTable.SBone и содержащее информацию о костяшках в руке игрока.</li>
+<br />
+<li>Среди методов класса обязаны присутствовать готовые методы Initialize(), PrintAll(), GetCount() и методы для разработки AddItem(), GetScore(), MakeStep() с предопределенными сигнатурами.</li>
+<br />
+<form asp-action="UploadFile" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <input name="file" type="file" accept=".cs" />
+    <input type="submit" value="Загрузить" />
+    <span asp-validation-for="Path"></span>
+</form>
+<br />
+@if (Model.Path != null)
+{
+    <p>Текущий файл: <a asp-action="DownloadFile" asp-controller="Home">@Model.Name</a></p>
+    <details><summary>Содержимое</summary><pre>@Model.Content</pre></details>
+    <br />
+}
+
+
+
+
+<a asp-action="Index" asp-controller="Home">Назад</a>

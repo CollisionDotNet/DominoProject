@@ -1,0 +1,118 @@
+﻿@model Tournament.StandingsTree
+
+<div id="tournament-table" class="tournament-table">
+    @for (int i = 0; i < Model.rounds.Length; i++)
+    {
+        <div class="round">
+            @for (int j = 0; j < Model.rounds[i].matchups.Length; j++)
+            {
+                Tournament.StandingsTree.Matchup currentMatchup = Model.rounds[i].matchups[j];
+
+                string topScores = currentMatchup.Top.showScores ? currentMatchup.firstPlayerStringResult : "\u00A0";
+                string bottomScores = currentMatchup.Bottom.showScores ? currentMatchup.secondPlayerStringResult : "\u00A0";
+                string topName = currentMatchup.Top.CSSclass != Tournament.StandingsTree.PlayerSlot.SlotCSSClass.nocontent ? currentMatchup.Top.GetPlayerName : "\u00A0";
+                string bottomName = currentMatchup.Bottom.CSSclass != Tournament.StandingsTree.PlayerSlot.SlotCSSClass.nocontent ? currentMatchup.Bottom.GetPlayerName : "\u00A0";
+
+            <div class="bracket-game" id="@i @j">
+                <div id="@i @j block" class="block">
+                    <div id="@i @j top" class="player top @currentMatchup.Top.CSSclass.ToString()">@topName<div class="score">@topScores</div></div>
+                    <div id="@i @j bot" class="player bot @currentMatchup.Bottom.CSSclass.ToString()">@bottomName<div class="score">@bottomScores</div></div>
+                </div>
+                @if (!currentMatchup.played && currentMatchup.Top.user != null && currentMatchup.Bottom.user != null && currentMatchup.Top.CSSclass != Tournament.StandingsTree.PlayerSlot.SlotCSSClass.nocontent && currentMatchup.Bottom.CSSclass != Tournament.StandingsTree.PlayerSlot.SlotCSSClass.nocontent)
+                {
+                    <form asp-action="PlayMatchup" asp-controller="Game" method="post" style="text-align: center">
+                        <input type="hidden" name="roundNum" value="@i" />
+                        <input type="hidden" name="matchupNum" value="@j" />
+                        <button type="submit" style="height: 30px;">Сыграть встречу</button>
+                    </form>
+                }
+                else if (currentMatchup.played && currentMatchup.Top.user != null && currentMatchup.Bottom.user != null)
+                {
+                    if (!currentMatchup.resShowed)
+                    {
+                        <form asp-action="ShowResult" asp-controller="Game" method="post" style="text-align: center">
+                            <input type="hidden" name="roundNum" value="@i" />
+                            <input type="hidden" name="matchupNum" value="@j" />
+                            <button type="submit" style="height: 30px;">Показать результат</button>
+                        </form>
+                    }
+                    <form asp-action="MatchupInfo" asp-controller="Game" method="post" style="text-align: center">
+                        <input type="hidden" name="roundNum" value="@i" />
+                        <input type="hidden" name="matchupNum" value="@j" />
+                        <button type="submit" style="height: 30px;">Открыть таблицу результатов</button>
+                    </form>
+
+                }
+                else
+                {
+                    <div style="height: 30px;"></div>
+                }
+            </div>
+            }
+        </div>
+    }
+
+</div>
+
+<style type="text/css">
+    .tournament-table {
+        /*        width: 100%;
+        overflow-x: scroll;
+        white-space: nowrap;*/
+    }
+
+    .round {
+        /*display: inline-block;*/
+        float: left;
+    }
+
+    .player {
+        min-width: 100px;
+        border: 1px solid #AAA;
+        padding-left: 10px;
+        height: 30px;
+    }
+
+        .player.top {
+            border-radius: 3px 3px 0 0;
+            height: 30px;
+        }
+
+        .player.bot {
+            border-radius: 0 0 3px 3px;
+            height: 30px;
+        }
+
+        .player .score {
+            display: inline;
+            float: right;
+            border-left: 1px solid #AAA;
+            padding-left: 10px;
+            padding-right: 10px;
+            background: #EEE;
+            height: 28px;
+            width: 48px;
+        }
+
+        .player.neutral {
+            background-color: transparent;
+            height: 30px;
+        }
+
+        .player.win {
+            background-color: #B8F2B8;
+            height: 30px;
+        }
+
+        .player.loss {
+            background-color: #F2B8B8;
+            height: 30px;
+        }
+</style>
+<script src="/js/leader-line.min.js"></script>
+<script>
+    var deep = @Helper.SerializeObject(Model.rounds.Length);
+    var fix_row_height = 30;
+</script>
+<script src="/js/playoff.js"></script>
+<script src="/js/anim-event.min.js"></script>

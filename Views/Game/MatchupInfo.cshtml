@@ -1,0 +1,29 @@
+﻿@model Tournament.StandingsTree.Matchup
+@using System.IO
+@using System.Text.RegularExpressions
+
+<a asp-action="Playoff" asp-controller="Game">Назад к турниру</a>
+@{
+    DirectoryInfo dir = new DirectoryInfo(Model.directoryPath);
+    FileInfo[] files = dir.GetFiles().OrderBy(n => Regex.Replace(n.Name, @"\d+", n => n.Value.PadLeft(4, '0'))).ToArray();
+    <table>
+        <tr>
+            <td>Номер игры</td>
+            <td>Очки игрока <br />@Model.Top.user.Name @Model.Top.user.Surname</td>
+            <td>Очки игрока <br />@Model.Bottom.user.Name @Model.Bottom.user.Surname</td>
+            <td>Визуализация</td>
+            <td>Отображение <br />результатов</td>
+        </tr>
+        @for (int i = 0; i < files.Length; i++)
+        {
+        <tr>
+            <td>Игра №@System.IO.Path.GetFileNameWithoutExtension(files[i].FullName)</td>
+            <td>@(Model.gamesResReveales[i] ? Model.setScores.scores[i].firstPlayerScore.ToString() : "")</td>
+            <td>@(Model.gamesResReveales[i] ? Model.setScores.scores[i].secondPlayerScore.ToString() : "")</td>
+            <td><a asp-action="Visualise" asp-controller="Game" asp-route-path="@files[i].FullName" method="post">Визуализировать</a></td>
+            <td><a asp-action="RevealGameRes" asp-controller="Game" asp-route-roundNum="@ViewBag.roundNum" asp-route-matchupNum="@ViewBag.matchupNum" asp-route-num="@i" method="post">Показать <br />результат</a></td>
+        </tr>
+        }
+    </table>
+}
+
